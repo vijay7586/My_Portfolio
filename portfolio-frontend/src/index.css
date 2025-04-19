@@ -17,3 +17,130 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Twinkling star effect */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 1; }
+}
+
+.twinkle-dot {
+  position: absolute;
+  background-color: white;
+  border-radius: 50%;
+  animation: twinkle 3s infinite;
+  pointer-events: none;
+}
+
+.twinkle-dot:nth-child(1) { animation-delay: 0s; }
+.twinkle-dot:nth-child(2) { animation-delay: 0.5s; }
+.twinkle-dot:nth-child(3) { animation-delay: 1s; }
+.twinkle-dot:nth-child(4) { animation-delay: 1.5s; }
+.twinkle-dot:nth-child(5) { animation-delay: 2s; }
+.twinkle-dot:nth-child(6) { animation-delay: 2.5s; }
+
+/* Beam effect */
+@keyframes beam {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.beam-effect {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(147, 51, 234, 0.1),
+    transparent
+  );
+  background-size: 200% 100%;
+  animation: beam 8s linear infinite;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* Border light effect */
+@keyframes borderLight {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.border-light {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    #8b5cf6,
+    #f97316,
+    #8b5cf6
+  );
+  background-size: 200% 100%;
+  animation: borderLight 3s linear infinite;
+  border-radius: inherit;
+  z-index: -1;
+  opacity: 0.5;
+  filter: blur(8px);
+}
+
+.border-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: inherit;
+  border-radius: inherit;
+  animation: borderLight 3s linear infinite reverse;
+  opacity: 0.5;
+  filter: blur(12px);
+}
+
+/* Scrolling text animation */
+@keyframes scrollText {
+  0% {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  20% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  80% {
+    transform: translateX(0%);
+    opacity: 1;
+  }
+  90% {
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0%);
+    opacity: 0;
+  }
+}
+
+.scrolling-text {
+  display: inline-block;
+  white-space: nowrap;
+  animation: scrollText 6s linear infinite;
+  position: relative;
+  overflow: hidden;
+  min-width: 200px;
+  text-align: left;
+  padding-right: 20px;
+}
