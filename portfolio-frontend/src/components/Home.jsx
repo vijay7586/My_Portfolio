@@ -117,8 +117,8 @@ const Home = () => {
             </a>
 
             <a
-              href="/resume.pdf"
-              target="_blank"
+              href="/vijay_fullstack_resume.pdf"
+              download="Vijay_Padala_Resume.pdf"
               className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
             >
               My Resume
