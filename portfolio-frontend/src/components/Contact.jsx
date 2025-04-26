@@ -8,11 +8,16 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  const [status, setStatus] = useState({ type: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setStatus({ type: '', message: '' });
+
     try {
-      const response = await fetch('http://localhost:5000/api/contact', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/contact`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,15 +25,18 @@ const Contact = () => {
         body: JSON.stringify(formData),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        alert('Message sent successfully!');
+        setStatus({ type: 'success', message: 'Message sent successfully!' });
         setFormData({ name: '', email: '', message: '' });
       } else {
-        alert('Failed to send message. Please try again.');
+        setStatus({ type: 'error', message: data.error || 'Failed to send message. Please try again.' });
       }
     } catch (error) {
-      console.error('Error:', error);
-      alert('An error occurred. Please try again later.');
+      setStatus({ type: 'error', message: 'An error occurred. Please try again later.' });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -106,6 +114,15 @@ const Contact = () => {
                   className="mt-1 block w-full rounded-md border-2 border-gray-800 dark:border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-500"
                 />
               </div>
+              {status.message && (
+                <div className={`p-4 rounded-md ${
+                  status.type === 'success' 
+                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
+                    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
+                }`}>
+                  {status.message}
+                </div>
+              )}
               <div className="flex justify-between items-center">
                 <div className="flex space-x-6">
                   <a href="mailto:vijaydurgareddy9@gmail.com" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="Email">
@@ -117,9 +134,12 @@ const Contact = () => {
                 </div>
                 <button
                   type="submit"
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 px-6 rounded-md hover:from-blue-600 hover:to-purple-600 transition-colors duration-300"
+                  disabled={isSubmitting}
+                  className={`bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 px-6 rounded-md hover:from-blue-600 hover:to-purple-600 transition-colors duration-300 ${
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                 >
-                  Send Message
+                  {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
               </div>
             </form>
