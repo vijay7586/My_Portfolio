@@ -12,7 +12,7 @@ const experiences = [
   {
     type: 'education',
     company: 'Sacred Heart University',
-    position: 'Masters of Computer and Information Science',
+    position: 'Masters in Computer and Information Sciences',
     period: 'Aug 2023 - Dec 2024',
     description: 'Pursuing advanced studies in Computer Science with focus on modern software development and emerging technologies.',
     technologies: ['Advanced Programming', 'Data Structures', 'Machine Learning', 'Cloud Computing'],
@@ -47,8 +47,8 @@ const experiences = [
   },
   {
     type: 'education',
-    company: 'Saveeth School of Engineering',
-    position: 'Bachelor of Technology in Electronics and Communication Engineering',
+    company: 'Saveetha School of Engineering',
+    position: 'Bachelor of Engineering in Electronics and Communication Engineering',
     period: 'Aug 2017 - May 2021',
     description: 'Completed undergraduate studies with focus on electronics, communication systems, and embedded programming.',
     technologies: ['Embedded Systems', 'Digital Electronics', 'Communication Systems', 'C/C++'],
