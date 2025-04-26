@@ -5,7 +5,7 @@ import { Menu, X, Sun, Moon } from 'lucide-react';
 
 const NavBar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeSection, setActiveSection] = useState('home');
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const NavBar = () => {
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
         onClick={() => setIsDarkMode(!isDarkMode)}
-        className="fixed right-5 top-4 p-2 rounded-full text-white hover:text-blue-400 hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg sm:right-8 sm:top-7"
+        className="fixed right-5 top-4 p-2 rounded-full text-white hover:text-blue-400 hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg sm:right-8 sm:top-7 border-2 border-gray-200 dark:border-gray-700"
         aria-label="Toggle theme"
       >
         {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

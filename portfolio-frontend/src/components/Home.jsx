@@ -79,7 +79,7 @@ const Home = () => {
           >
             <AnimatePresence mode="wait">
               <motion.div
-                className="text-2xl md:text-3xl font-sans font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-purple-500 flex items-center"
+                className="text-2xl md:text-3xl font-sans font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 flex items-center"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: 0.2 }}
@@ -87,7 +87,7 @@ const Home = () => {
                 <span>I am a</span>
                 <div className="ml-2 h-8 overflow-hidden relative">
                   <motion.span
-                    className="scrolling-text text-2xl md:text-3xl font-sans font-medium bg-clip-text text-transparent bg-gradient-to-r from-violet-800 to-violet-600"
+                    className="scrolling-text text-2xl md:text-3xl font-sans font-medium bg-clip-text text-transparent bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.5, delay: 0.4 }}
@@ -110,7 +110,7 @@ const Home = () => {
           <div className="flex gap-2 flex-col sm:flex-row text-lg font-medium">
             <a
               href="#contact"
-              className="group bg-gradient-to-r from-sky-400 to-sky-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-sky-500 hover:to-sky-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
             >
               Contact me
               <BsArrowRight className="opacity-70 group-hover:translate-x-0.5 transition" />
@@ -119,7 +119,7 @@ const Home = () => {
             <a
               href="/resume.pdf"
               target="_blank"
-              className="group bg-gradient-to-r from-sky-400 to-sky-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-sky-500 hover:to-sky-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
             >
               My Resume
               <HiDownload className="opacity-60 group-hover:translate-y-0.5 transition" />
@@ -127,10 +127,10 @@ const Home = () => {
           </div>
           <div className="flex gap-2 text-lg font-medium">
             <a
-              href="https://linkedin.com"
+              href="https://www.linkedin.com/in/vijay-padala-1217121a1"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-sky-400 to-sky-500 text-white p-4 flex items-center gap-2 rounded-full outline-none focus:scale-[1.1] hover:scale-[1.1] hover:from-sky-500 hover:to-sky-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 flex items-center gap-2 rounded-full outline-none focus:scale-[1.1] hover:scale-[1.1] hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
               aria-label="Linkedin"
               title="Linkedin"
             >
@@ -138,10 +138,10 @@ const Home = () => {
             </a>
 
             <a
-              href="https://github.com"
+              href="https://github.com/vijay7586"
               target="_blank"
               rel="noopener noreferrer"
-              className="bg-gradient-to-r from-sky-400 to-sky-500 text-white p-4 flex items-center gap-2 text-[1.35rem] rounded-full outline-none focus:scale-[1.1] hover:scale-[1.1] hover:from-sky-500 hover:to-sky-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
+              className="bg-gradient-to-r from-blue-500 to-purple-500 text-white p-4 flex items-center gap-2 text-[1.35rem] rounded-full outline-none focus:scale-[1.1] hover:scale-[1.1] hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
               aria-label="GitHub"
               title="GitHub"
             >
