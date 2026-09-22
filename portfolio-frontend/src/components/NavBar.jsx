@@ -1,20 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-scroll';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 
-const NavBar = () => {
+const NavBar = ({ isDarkMode, toggleTheme }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [activeSection, setActiveSection] = useState('home');
-
-  useEffect(() => {
-    if (isDarkMode) {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-  }, [isDarkMode]);
 
   const navLinks = [
     { name: 'Home', to: 'home' },
@@ -76,8 +67,8 @@ const NavBar = () => {
       <motion.button
         initial={{ opacity: 0, y: -100 }}
         animate={{ opacity: 1, y: 0 }}
-        onClick={() => setIsDarkMode(!isDarkMode)}
-        className="fixed right-5 top-4 p-2 rounded-full text-white hover:text-blue-400 hover:bg-gray-800 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg sm:right-8 sm:top-7 border-2 border-gray-200 dark:border-gray-700"
+        onClick={toggleTheme}
+        className="fixed right-5 top-4 p-2.5 rounded-full text-white bg-gray-900/80 backdrop-blur-[0.5rem] border border-white/40 dark:border-black/40 shadow-lg shadow-black/[0.03] hover:text-blue-400 hover:bg-gray-900 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg sm:right-8 sm:top-7"
         aria-label="Toggle theme"
       >
         {isDarkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}

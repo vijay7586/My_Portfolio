@@ -1,8 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
-    "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}",
+    "./public/index.html",
+    "./src/**/*.{js,jsx,ts,tsx}",
   ],
   darkMode: 'class',
   theme: {
@@ -18,7 +18,7 @@ export default {
         },
       },
       animation: {
-        'twinkle': 'twinkle 1s ease-in-out infinite',
+        twinkle: 'twinkle 1s ease-in-out infinite',
       },
       keyframes: {
         twinkle: {
@@ -29,5 +29,4 @@ export default {
     },
   },
   plugins: [],
-}
-
+};

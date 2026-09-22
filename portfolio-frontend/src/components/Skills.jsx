@@ -1,55 +1,51 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaGitAlt, FaDocker, FaAws, FaAngular } from 'react-icons/fa';
-import { SiRedux, SiExpress, SiSpringboot, SiMongodb, SiMysql, SiGraphql, SiKubernetes, SiJenkins, SiTerraform, SiPostman, SiLinux, SiTailwindcss, SiThreedotjs, SiAmazondynamodb, SiPostgresql, SiOracle } from 'react-icons/si';
+import { FaReact, FaNodeJs, FaPython, FaJava, FaHtml5, FaCss3Alt, FaGitAlt, FaDocker, FaAws, FaAngular, FaWindows } from 'react-icons/fa';
+import { SiRedux, SiExpress, SiSpringboot, SiMongodb, SiMysql, SiGraphql, SiKubernetes, SiTerraform, SiPostman, SiTailwindcss, SiPostgresql, SiOracle, SiTypescript, SiFirebase, SiFastapi, SiGithubactions, SiOpenai } from 'react-icons/si';
 import { DiJavascript } from 'react-icons/di';
-
-// Custom Kafka icon component
-const KafkaIcon = () => (
-  <svg
-    className="w-6 h-6 text-purple-500"
-    viewBox="0 0 24 24"
-    fill="currentColor"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <path d="M12 2L2 7v10l10 5 10-5V7L12 2zm0 2.5L20 9v6l-8 4-8-4V9l8-4.5z" />
-    <path d="M12 6L6 9v6l6 3 6-3V9l-6-3z" />
-  </svg>
-);
 
 const skills = [
   {
-    category: 'Programming Languages & Fundamentals',
+    category: 'AI / Generative AI',
     items: [
-      { name: 'Java', icon: <FaJava className="text-red-500" /> },
+      { name: 'LLMs / GPT', icon: <SiOpenai className="text-gray-800 dark:text-white" /> },
+      { name: 'OpenAI APIs', icon: <SiOpenai className="text-emerald-500" /> },
+      { name: 'RAG', icon: <FaPython className="text-blue-600" /> },
+      { name: 'Embeddings', icon: <FaPython className="text-indigo-500" /> },
+      { name: 'AI Agents', icon: <FaReact className="text-purple-500" /> },
+      { name: 'TensorFlow', icon: <FaPython className="text-orange-500" /> },
+    ]
+  },
+  {
+    category: 'Programming Languages',
+    items: [
       { name: 'Python', icon: <FaPython className="text-blue-600" /> },
+      { name: 'Java', icon: <FaJava className="text-red-500" /> },
       { name: 'JavaScript', icon: <DiJavascript className="text-yellow-500" /> },
-      { name: 'HTML', icon: <FaHtml5 className="text-orange-500" /> },
-      { name: 'CSS', icon: <FaCss3Alt className="text-blue-400" /> },
+      { name: 'TypeScript', icon: <SiTypescript className="text-blue-600" /> },
       { name: 'SQL', icon: <SiMysql className="text-blue-500" /> },
+      { name: 'HTML / CSS', icon: <FaHtml5 className="text-orange-500" /> },
     ]
   },
   {
-    category: 'Front-End Frameworks & Libraries',
+    category: 'Frontend & Mobile',
     items: [
-      { name: 'React', icon: <FaReact className="text-blue-500" /> },
+      { name: 'React.js', icon: <FaReact className="text-blue-500" /> },
+      { name: 'React Native', icon: <FaReact className="text-cyan-500" /> },
       { name: 'Redux', icon: <SiRedux className="text-purple-500" /> },
-      { name: 'Angular 8', icon: <FaAngular className="text-red-500" /> },
+      { name: 'Angular', icon: <FaAngular className="text-red-500" /> },
       { name: 'Tailwind CSS', icon: <SiTailwindcss className="text-blue-400" /> },
-      { name: 'Three.js', icon: <SiThreedotjs className="text-black dark:text-white" /> },
-      { name: 'Framer Motion', icon: <FaReact className="text-purple-500" /> },
-      
-     
+      { name: 'CSS', icon: <FaCss3Alt className="text-blue-400" /> },
     ]
   },
   {
-    category: 'Back-End Frameworks & Technologies',
+    category: 'Backend & APIs',
     items: [
-      { name: 'Spring Boot', icon: <SiSpringboot className="text-green-500" /> },
-      { name: 'Hibernate', icon: <FaJava className="text-red-500" /> },
       { name: 'Node.js', icon: <FaNodeJs className="text-green-500" /> },
-      { name: 'Express.js', icon: <SiExpress className="text-black dark:text-white" /> },
-      { name: 'RESTful APIs', icon: <SiPostman className="text-orange-500" /> },
+      { name: 'Express / NestJS', icon: <SiExpress className="text-black dark:text-white" /> },
+      { name: 'FastAPI', icon: <SiFastapi className="text-teal-500" /> },
+      { name: 'Spring Boot', icon: <SiSpringboot className="text-green-500" /> },
+      { name: 'REST APIs', icon: <SiPostman className="text-orange-500" /> },
       { name: 'GraphQL', icon: <SiGraphql className="text-pink-500" /> }
     ]
   },
@@ -57,31 +53,22 @@ const skills = [
     category: 'Cloud & DevOps',
     items: [
       { name: 'AWS', icon: <FaAws className="text-orange-500" /> },
+      { name: 'Azure', icon: <FaWindows className="text-blue-500" /> },
       { name: 'Docker', icon: <FaDocker className="text-blue-500" /> },
-      { name: 'Jenkins', icon: <SiJenkins className="text-red-500" /> },
       { name: 'Kubernetes', icon: <SiKubernetes className="text-blue-500" /> },
       { name: 'Terraform', icon: <SiTerraform className="text-purple-500" /> },
-      { name: 'Kafka', icon: <KafkaIcon /> }
+      { name: 'GitHub Actions', icon: <SiGithubactions className="text-gray-800 dark:text-white" /> }
     ]
   },
   {
-    category: 'Databases',
+    category: 'Databases & Tools',
     items: [
-      { name: 'MongoDB', icon: <SiMongodb className="text-green-500" /> },
-      { name: 'MySQL', icon: <SiMysql className="text-blue-500" /> },
-      { name: 'DynamoDB', icon: <SiAmazondynamodb className="text-green-500" /> },
       { name: 'PostgreSQL', icon: <SiPostgresql className="text-blue-500" /> },
+      { name: 'MongoDB', icon: <SiMongodb className="text-green-500" /> },
+      { name: 'Azure SQL', icon: <FaWindows className="text-blue-600" /> },
+      { name: 'Firebase', icon: <SiFirebase className="text-yellow-500" /> },
       { name: 'Oracle', icon: <SiOracle className="text-red-500" /> },
-    ]
-  },
-  {
-    category: 'Tools & Technologies',
-    items: [
-      { name: 'Postman', icon: <SiPostman className="text-orange-500" /> },
-      { name: 'JUnit', icon: <FaJava className="text-red-500" /> },
-      { name: 'Apache Tomcat', icon: <FaJava className="text-red-500" /> },
-      { name: 'Git', icon: <FaGitAlt className="text-orange-500" /> },
-      { name: 'Linux', icon: <SiLinux className="text-black dark:text-white" /> }
+      { name: 'Git / JIRA', icon: <FaGitAlt className="text-orange-500" /> }
     ]
   }
 ];

@@ -6,9 +6,9 @@ import { HiDownload } from 'react-icons/hi';
 
 const Home = () => {
   const professions = [
-    "Full Stack Developer",
-    "Software Engineer",
-    "AI Web Developer"
+    "Senior Software Engineer",
+    "AI Full Stack Engineer",
+    "Web and Mobile Developer"
   ];
   const [currentProfession, setCurrentProfession] = useState(0);
 
@@ -25,18 +25,9 @@ const Home = () => {
       id="home"
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200 dark:from-gray-900 dark:to-gray-800 transition-colors duration-500"
     >
-      {/* Background Images */}
       <div className="absolute inset-0 z-0">
-        <img
-          src="/images/Light_theme_background.jpg"
-          alt="Light theme background"
-          className="w-full h-full object-cover transition-all duration-500 dark:opacity-0 opacity-50"
-        />
-        <img
-          src="/images/Dark_theme_background.jpg"
-          alt="Dark theme background"
-          className="absolute inset-0 w-full h-full object-cover transition-all duration-500 dark:opacity-50 opacity-0"
-        />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.18),_transparent_55%)] dark:bg-[radial-gradient(circle_at_top,_rgba(168,85,247,0.22),_transparent_55%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(#9ca3af_1px,transparent_1px)] [background-size:22px_22px] opacity-30 dark:opacity-10" />
       </div>
 
       {/* Content */}
@@ -54,9 +45,9 @@ const Home = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-purple-500/40 via-pink-500/40 to-purple-500/40 rounded-full blur-xl animate-pulse shadow-[0_0_20px_rgba(168,85,247,0.5)] dark:shadow-[0_0_20px_rgba(236,72,153,0.5)]" />
               <img
-                src="/images/vijay-profile.jpg"
-                alt="Profile portrait"
-                className="h-32 w-32 sm:h-40 sm:w-40 rounded-full object-cover border-[0.35rem] border-gradient-to-r from-gray-400 to-blue-500 shadow-[0_0_20px_rgba(168,85,247,0.3)] dark:shadow-[0_0_20px_rgba(236,72,153,0.3)] relative z-10"
+                src={`${process.env.PUBLIC_URL}/images/vijay-profile.jpg`}
+                alt="Vijaya Durga Reddy Padala"
+                className="h-32 w-32 sm:h-40 sm:w-40 rounded-full object-cover object-[center_12%] border-[0.35rem] border-white/70 dark:border-gray-800 shadow-[0_0_20px_rgba(168,85,247,0.3)] dark:shadow-[0_0_20px_rgba(236,72,153,0.3)] relative z-10"
               />
             </motion.div>
           </div>
@@ -70,33 +61,27 @@ const Home = () => {
           Vijaya Durga Reddy Padala
         </motion.h1>
 
-        <div className="h-16 flex items-center justify-center">
+        <div className="min-h-[4.5rem] flex items-center justify-center">
           <motion.div
-            className="flex items-center gap-2"
+            className="flex items-center justify-center gap-2 flex-wrap"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
           >
+            <span className="text-xl md:text-2xl font-sans font-medium bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-green-500 to-purple-500">
+              I am a
+            </span>
             <AnimatePresence mode="wait">
-              <motion.div
-                className="text-2xl md:text-3xl font-sans font-medium mb-4 bg-clip-text text-transparent bg-gradient-to-r from-blue-500 via-green-500 to-purple-500 flex items-center"
-                initial={{ opacity: 0, y: 20 }}
+              <motion.span
+                key={currentProfession}
+                className="text-xl md:text-2xl font-sans font-medium bg-clip-text text-transparent bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
+                exit={{ opacity: 0, y: -16 }}
+                transition={{ duration: 0.35 }}
               >
-                <span>I am a</span>
-                <div className="ml-2 h-8 overflow-hidden relative">
-                  <motion.span
-                    className="scrolling-text text-2xl md:text-3xl font-sans font-medium bg-clip-text text-transparent bg-gradient-to-r from-green-500 via-blue-500 to-purple-500"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ duration: 0.5, delay: 0.4 }}
-                    key={currentProfession}
-                  >
-                    {professions[currentProfession]}
-                  </motion.span>
-                </div>
-              </motion.div>
+                {professions[currentProfession]}
+              </motion.span>
             </AnimatePresence>
           </motion.div>
         </div>
@@ -117,8 +102,8 @@ const Home = () => {
             </a>
 
             <a
-              href="/vijay_fullstack_resume.pdf"
-              download="Vijay_Padala_Resume.pdf"
+              href={`${process.env.PUBLIC_URL}/Vijaya_Resume.pdf`}
+              download="Vijaya_Durga_Reddy_Padala_Resume.pdf"
               className="group bg-gradient-to-r from-blue-500 to-purple-500 text-white px-7 py-3 flex items-center gap-2 rounded-full outline-none focus:scale-105 hover:scale-105 hover:from-blue-600 hover:to-purple-600 active:scale-95 transition-all duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-lg"
             >
               My Resume

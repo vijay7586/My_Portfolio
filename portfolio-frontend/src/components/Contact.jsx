@@ -17,28 +17,61 @@ const Contact = () => {
     setStatus({ type: '', message: '' });
 
     try {
-      const apiUrl = process.env.NODE_ENV === 'production' 
-        ? process.env.REACT_APP_API_URL 
-        : 'http://localhost:5000';
+      const apiUrl = process.env.REACT_APP_API_URL || '';
+      const payload = JSON.stringify(formData);
+      let delivered = false;
+      let errorMessage = '';
 
-      const response = await fetch(`${apiUrl}/api/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      if (apiUrl || process.env.NODE_ENV !== 'production') {
+        try {
+          const response = await fetch(`${apiUrl}/api/contact`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: payload,
+          });
+          const data = await response.json();
+          if (response.ok) {
+            delivered = true;
+          } else {
+            errorMessage = data.error || 'Backend could not send the message.';
+          }
+        } catch (error) {
+          errorMessage = 'Backend is unavailable.';
+        }
+      }
 
-      const data = await response.json();
+      if (!delivered) {
+        const formSubmitResponse = await fetch('https://formsubmit.co/ajax/vijayadurgareddyp@gmail.com', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            _subject: `Portfolio contact from ${formData.name}`,
+          }),
+        });
+        const formSubmitData = await formSubmitResponse.json();
+        if (formSubmitResponse.ok && formSubmitData.success !== 'false') {
+          delivered = true;
+        } else {
+          errorMessage = formSubmitData.message || errorMessage || 'Failed to send message.';
+        }
+      }
 
-      if (response.ok) {
-        setStatus({ type: 'success', message: 'Message sent successfully!' });
+      if (delivered) {
+        setStatus({ type: 'success', message: 'Message sent successfully! I will get back to you soon.' });
         setFormData({ name: '', email: '', message: '' });
       } else {
-        setStatus({ type: 'error', message: data.error || 'Failed to send message. Please try again.' });
+        setStatus({ type: 'error', message: errorMessage || 'Failed to send message. Please email me directly.' });
       }
     } catch (error) {
-      setStatus({ type: 'error', message: 'An error occurred. Please try again later.' });
+      setStatus({ type: 'error', message: 'An error occurred. Please email vijayadurgareddyp@gmail.com.' });
     } finally {
       setIsSubmitting(false);
     }
@@ -129,7 +162,7 @@ const Contact = () => {
               )}
               <div className="flex justify-between items-center">
                 <div className="flex space-x-6">
-                  <a href="mailto:vijaydurgareddy9@gmail.com" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="Email">
+                  <a href="mailto:vijayadurgareddyp@gmail.com" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="Email">
                     <FaEnvelope className="w-6 h-6" />
                   </a>
                   <a href="https://www.linkedin.com/in/vijay-padala-1217121a1" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="LinkedIn">
