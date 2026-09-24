@@ -3,6 +3,7 @@ import Navbar from './components/Navigation';
 import Hero from './components/Hero';
 import TechScroller from './components/TechScroller';
 import TwinkleBackground from './components/TwinkleBackground';
+import AskAboutMeButton from './components/assistant/AskAboutMeButton';
 import { useTheme } from './hooks/useTheme';
 
 const About = lazy(() => import('./components/About'));
@@ -14,6 +15,7 @@ const Research = lazy(() => import('./components/Research'));
 const Contact = lazy(() => import('./components/Contact'));
 const Footer = lazy(() => import('./components/Footer'));
 const ResumeModal = lazy(() => import('./components/ResumeModal'));
+const AssistantPanel = lazy(() => import('./components/assistant/AssistantPanel'));
 
 const SectionFallback = () => (
   <div className="section-shell" aria-hidden="true">
@@ -23,6 +25,7 @@ const SectionFallback = () => (
 
 function App() {
   const [resumeOpen, setResumeOpen] = useState(false);
+  const [assistantOpen, setAssistantOpen] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   return (
@@ -44,8 +47,19 @@ function App() {
             <Footer />
           </Suspense>
         </main>
+
+        {!assistantOpen && <AskAboutMeButton onClick={() => setAssistantOpen(true)} />}
+
         <Suspense fallback={null}>
           <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
+          <AssistantPanel
+            open={assistantOpen}
+            onClose={() => setAssistantOpen(false)}
+            onOpenResume={() => {
+              setAssistantOpen(false);
+              setResumeOpen(true);
+            }}
+          />
         </Suspense>
       </div>
     </div>
