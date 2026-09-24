@@ -1,57 +1,76 @@
 import React from 'react';
-import { motion } from 'framer-motion';
+import { Briefcase, GraduationCap } from 'lucide-react';
+import Section from './Section';
+import { profile } from '../data/portfolioData';
+
+const SideCard = ({ icon: Icon, title, children }) => (
+  <div className="rounded-card border border-line/70 bg-surface/70 p-5 shadow-soft backdrop-blur-sm">
+    <div className="mb-3 flex items-center gap-2 border-b border-line/50 pb-3">
+      <Icon className="h-4 w-4 text-accent" aria-hidden="true" />
+      <h3 className="text-sm font-semibold tracking-wide text-ink">{title}</h3>
+    </div>
+    {children}
+  </div>
+);
 
 const About = () => {
-  return (
-    <section
-      id="about"
-      className="min-h-[40vh] flex items-start justify-center pt-8 pb-4 px-8 transition-colors duration-500 bg-gray-100 dark:bg-gray-900 relative"
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] [background-size:20px_20px] dark:bg-none" />
-      <div className="absolute inset-0 dark:block hidden">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="twinkle-dot"
-            style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: `${Math.random() * 0.5 + 0.2}`,
-            }}
-          />
-        ))}
-      </div>
-      <div className="max-w-4xl mx-auto relative z-10">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl font-bold mb-4 text-center text-gray-800 dark:text-white"
-        >
-          About Me
-        </motion.h2>
+  const { experience, education, story, howIWork } = profile.about;
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="relative group"
-        >
-          <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-2xl animate-pulse" />
-          <div className="relative p-6 bg-white dark:bg-gray-800 rounded-2xl border border-green-300/20 group-hover:border-green-300/40 transition-all duration-300 overflow-hidden">
-            <div className="beam-effect" />
-            <p className="max-w-[45rem] mx-auto leading-8 text-justify text-gray-700 dark:text-gray-300 relative z-10">
-              I am a <b className="italic">Senior AI Full Stack Engineer</b> with <b className="italic">5+ years of experience</b> building scalable enterprise applications across <b className="italic">Generative AI, full-stack development, backend engineering, and cloud</b>. I work with <b className="italic">Python, Java, JavaScript, TypeScript, React.js, React Native, Node.js, Spring Boot, FastAPI, AWS, and Azure</b>. I integrate <b className="italic">LLMs, OpenAI APIs, RAG, embeddings, semantic search, and AI agents</b> into production workflows, and I ship secure APIs, event-driven services, and CI/CD pipelines with Docker, Kubernetes, Terraform, GitHub Actions, and Jenkins. Based in Philadelphia, I currently lead AI-enabled patient-facing web and mobile experiences at Temple University Health System.
+  return (
+    <Section id="about" kicker="Background" title="About Me">
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.35fr)] lg:gap-12 xl:gap-16">
+        <aside className="space-y-5">
+          <SideCard icon={Briefcase} title="Experience">
+            <ul className="space-y-2.5 text-sm leading-relaxed text-muted">
+              {experience.map((item) => (
+                <li key={item} className="flex gap-2">
+                  <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" aria-hidden="true" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-xs text-muted">
+              Currently: <span className="font-medium text-ink">Senior Software Engineer II</span>
             </p>
+          </SideCard>
+
+          <SideCard icon={GraduationCap} title="Education">
+            <ul className="space-y-4">
+              {education.map((item) => (
+                <li key={item.degree}>
+                  <p className="text-sm font-medium leading-snug text-ink">{item.degree}</p>
+                  <p className="mt-1 text-sm text-muted">{item.school}</p>
+                </li>
+              ))}
+            </ul>
+          </SideCard>
+        </aside>
+
+        <div className="space-y-8">
+          <div>
+            <h3 className="mb-4 text-sm font-semibold tracking-wide text-ink lg:sr-only">
+              My story
+            </h3>
+            <div className="space-y-4 text-base leading-relaxed text-muted sm:text-[1.05rem]">
+              {story.map((paragraph, index) => (
+                <p
+                  key={paragraph.slice(0, 40)}
+                  className={index === 0 ? 'text-ink/90' : undefined}
+                >
+                  {paragraph}
+                </p>
+              ))}
+            </div>
           </div>
-        </motion.div>
+
+          <div className="border-t border-line/50 pt-6">
+            <h3 className="mb-3 text-sm font-semibold tracking-wide text-ink">How I work</h3>
+            <p className="text-base leading-relaxed text-muted sm:text-[1.05rem]">{howIWork}</p>
+          </div>
+        </div>
       </div>
-    </section>
+    </Section>
   );
 };
 
-export default About; 
+export default About;

@@ -1,130 +1,200 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { FaGithub, FaExternalLinkAlt } from 'react-icons/fa';
+import React, { useState } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import { ExternalLink, Github, BookOpen } from 'lucide-react';
+import Section from './Section';
+import { projects, publicProjects } from '../data/portfolioData';
+import { useReducedMotion } from '../hooks/useReducedMotion';
 
-const projects = [
-  {
-    title: 'Mango Leaf Disease Detection',
-    description: 'Machine learning research project using Python, NumPy, TensorFlow, image preprocessing, feature extraction, and classification. Achieved 92% accuracy and published the work in IJERT.',
-    technologies: ['Python', 'TensorFlow', 'NumPy', 'Machine Learning'],
-    image: 'linear-gradient(135deg, #166534, #65a30d)',
-    githubLink: 'https://github.com/vijay7586',
-    liveLink: ''
-  },
-  {
-    title: 'Bug Tracking System',
-    description: 'Full-stack bug tracking application with React.js and Spring Boot. Built frontend workflows and backend REST services, and improved dashboard latency by 20% through optimization and caching.',
-    technologies: ['React.js', 'Spring Boot', 'REST APIs'],
-    image: 'linear-gradient(135deg, #1d4ed8, #7c3aed)',
-    githubLink: 'https://github.com/vijay7586',
-    liveLink: ''
-  }
+const TABS = [
+  { id: 'overview', label: 'Overview' },
+  { id: 'architecture', label: 'Architecture' },
+  { id: 'engineering', label: 'Engineering' },
+  { id: 'results', label: 'Results' },
 ];
 
-const Projects = () => {
+const ProjectCard = ({ project }) => {
+  const [tab, setTab] = useState('overview');
+  const reduced = useReducedMotion();
+
   return (
-    <section
-      id="projects"
-      className="min-h-screen flex items-center justify-center p-8 transition-colors duration-500 bg-gray-100 dark:bg-gray-900 relative"
-    >
-      <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] [background-size:20px_20px] dark:bg-none" />
-      <div className="absolute inset-0 dark:block hidden">
-        {[...Array(15)].map((_, i) => (
-          <div
-            key={i}
-            className="twinkle-dot"
-            style={{
-              width: `${Math.random() * 3 + 1}px`,
-              height: `${Math.random() * 3 + 1}px`,
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animationDelay: `${Math.random() * 3}s`,
-              opacity: `${Math.random() * 0.5 + 0.2}`,
-            }}
-          />
+    <article className="glass-panel card-interactive flex h-full flex-col overflow-hidden">
+      <div className="border-b border-line/60 bg-gradient-to-br from-accent/12 via-accent-soft/8 to-transparent p-6">
+        <p className="text-xs font-medium uppercase tracking-[0.18em] text-accent">{project.subtitle}</p>
+        <h3 className="mt-2 font-display text-xl font-semibold text-ink">{project.title}</h3>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {project.tags.map((tag) => (
+            <span key={tag} className="pill">
+              {tag}
+            </span>
+          ))}
+        </div>
+      </div>
+
+      <div className="flex flex-wrap gap-1 border-b border-line/50 p-2" role="tablist" aria-label={`${project.title} sections`}>
+        {TABS.map((item) => (
+          <button
+            key={item.id}
+            type="button"
+            role="tab"
+            aria-selected={tab === item.id}
+            className={`rounded-lg px-3 py-2 text-xs font-semibold transition-colors duration-200 ${
+              tab === item.id ? 'bg-accent/15 text-accent' : 'text-muted hover:bg-elevated/40 hover:text-ink'
+            }`}
+            onClick={() => setTab(item.id)}
+          >
+            {item.label}
+          </button>
         ))}
       </div>
-      <div className="max-w-6xl w-full mx-auto relative z-10">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl font-bold mb-12 text-center text-gray-800 dark:text-white"
-        >
-          Projects
-        </motion.h2>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 items-stretch"
-        >
-          {projects.map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              className="relative group h-full min-h-[28rem]"
-            >
-              <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-              <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-xl animate-pulse" />
-              <div className="relative h-full min-h-[28rem] flex flex-col bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 transition-colors duration-300 hover:shadow-xl hover:-translate-y-1 border-2 border-gray-400 dark:border-gray-500 group-hover:border-gray-500 dark:group-hover:border-gray-400">
-                <div
-                  role="img"
-                  aria-label={project.title}
-                  className="w-full h-40 shrink-0 rounded-lg flex items-end p-4 text-white font-semibold bg-cover bg-center mb-4"
-                  style={{ backgroundImage: project.image }}
-                >
-                  <span className="line-clamp-2">{project.title}</span>
+
+      <div className="flex flex-1 flex-col p-6" role="tabpanel">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={tab}
+            initial={reduced ? false : { opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={reduced ? undefined : { opacity: 0, y: -8 }}
+            transition={{ duration: 0.22 }}
+            className="flex-1 text-sm leading-relaxed text-muted"
+          >
+            {tab === 'overview' && (
+              <div className="space-y-4">
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink">Overview</p>
+                  <p>{project.overview.problem}</p>
                 </div>
-                <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 line-clamp-1">
-                  {project.title}
-                </h3>
-                <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-4 min-h-[6rem]">
-                  {project.description}
-                </p>
-                <div className="flex flex-wrap gap-2 mb-4 min-h-[2.5rem] content-start">
-                  {project.technologies.slice(0, 4).map((tech, techIndex) => (
-                    <span
-                      key={techIndex}
-                      className="px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-                <div className="flex space-x-4 mt-auto pt-2 min-h-[1.75rem]">
-                  {project.githubLink && (
-                    <a
-                      href={project.githubLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300"
-                    >
-                      <FaGithub className="mr-2" />
-                      GitHub
-                    </a>
-                  )}
-                  {project.liveLink && (
-                    <a
-                      href={project.liveLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300"
-                    >
-                      <FaExternalLinkAlt className="mr-2" />
-                      Live Demo
-                    </a>
-                  )}
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-ink">Value</p>
+                  <p>{project.overview.value}</p>
                 </div>
               </div>
-            </motion.div>
-          ))}
-        </motion.div>
+            )}
+            {tab === 'architecture' && (
+              <div className="space-y-4">
+                <p>{project.architecture.summary}</p>
+                <p>
+                  <span className="font-semibold text-ink">Data flow: </span>
+                  {project.architecture.dataFlow}
+                </p>
+                <ul className="grid gap-2 sm:grid-cols-2">
+                  {project.architecture.components.map((c) => (
+                    <li key={c} className="rounded-lg border border-line/60 bg-elevated/30 px-3 py-2 text-xs text-ink">
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {tab === 'engineering' && (
+              <div className="space-y-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-ink">Engineering decisions</p>
+                <ul className="list-disc space-y-2 pl-4">
+                  {project.engineering.decisions.map((d) => (
+                    <li key={d}>{d}</li>
+                  ))}
+                </ul>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  {[
+                    ['Security', project.engineering.security],
+                    ['Scalability', project.engineering.scalability],
+                    ['Reliability', project.engineering.reliability],
+                  ].map(([label, items]) => (
+                    <div key={label} className="rounded-lg border border-line/60 bg-elevated/20 p-3">
+                      <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-ink">{label}</p>
+                      <ul className="space-y-1 text-xs">
+                        {items.map((item) => (
+                          <li key={item}>• {item}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+            {tab === 'results' && (
+              <ul className="list-disc space-y-2 pl-4">
+                {project.results.map((r) => (
+                  <li key={r}>{r}</li>
+                ))}
+              </ul>
+            )}
+          </motion.div>
+        </AnimatePresence>
+
+        <p className="mt-5 text-xs italic text-muted/80">{project.privateNote}</p>
+
+        <div className="mt-5 flex flex-wrap gap-3 border-t border-line/50 pt-5">
+          {project.links.live ? (
+            <a href={project.links.live} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-4 !py-2 text-xs">
+              <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+              Live Demo
+            </a>
+          ) : (
+            <span className="pill">Private / enterprise system</span>
+          )}
+          {project.links.github ? (
+            <a href={project.links.github} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-4 !py-2 text-xs">
+              <Github className="h-3.5 w-3.5" aria-hidden="true" />
+              GitHub
+            </a>
+          ) : null}
+          <a href={project.links.caseStudy} className="btn-secondary !px-4 !py-2 text-xs">
+            <BookOpen className="h-3.5 w-3.5" aria-hidden="true" />
+            Case Study
+          </a>
+        </div>
       </div>
-    </section>
+    </article>
   );
 };
+
+const Projects = () => (
+  <Section
+    id="projects"
+    kicker="Selected Works"
+    title="Featured Projects"
+    subtitle="Three senior-level case studies focused on architecture and outcomes—kept separate from professional experience."
+  >
+    <div className="grid gap-6">
+      {projects.map((project) => (
+        <ProjectCard key={project.id} project={project} />
+      ))}
+    </div>
+
+    <div className="mt-12">
+      <h3 className="font-display text-xl font-semibold text-ink">Public repositories</h3>
+      <p className="mt-2 text-sm text-muted">Only real public links are shown.</p>
+      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+        {publicProjects.map((item) => (
+          <article key={item.id} className="glass-panel card-interactive flex h-full flex-col p-5">
+            <h4 className="font-display text-lg font-semibold text-ink">{item.title}</h4>
+            <p className="mt-2 flex-1 text-sm text-muted">{item.description}</p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {item.technologies.map((tech) => (
+                <li key={tech} className="pill">
+                  {tech}
+                </li>
+              ))}
+            </ul>
+            <div className="mt-5 flex flex-wrap gap-3">
+              {item.github && (
+                <a href={item.github} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-4 !py-2 text-xs">
+                  <Github className="h-3.5 w-3.5" aria-hidden="true" />
+                  GitHub
+                </a>
+              )}
+              {item.live && (
+                <a href={item.live} target="_blank" rel="noopener noreferrer" className="btn-secondary !px-4 !py-2 text-xs">
+                  <ExternalLink className="h-3.5 w-3.5" aria-hidden="true" />
+                  Live Demo
+                </a>
+              )}
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </Section>
+);
 
 export default Projects;

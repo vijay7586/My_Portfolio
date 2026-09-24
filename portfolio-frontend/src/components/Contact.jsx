@@ -1,24 +1,58 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaLinkedin, FaEnvelope } from 'react-icons/fa';
+import { Github, Linkedin, Mail, Download } from 'lucide-react';
+import Section from './Section';
+import { profile } from '../data/portfolioData';
+import { publicAsset } from '../utils/helpers';
 
-const Contact = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: ''
-  });
+const initialForm = {
+  name: '',
+  email: '',
+  company: '',
+  subject: '',
+  message: '',
+  website: '', // honeypot
+};
+
+const Contact = ({ onOpenResume }) => {
+  const [formData, setFormData] = useState(initialForm);
+  const [errors, setErrors] = useState({});
   const [status, setStatus] = useState({ type: '', message: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
+  };
+
+  const validate = () => {
+    const next = {};
+    if (!formData.name.trim()) next.name = 'Name is required.';
+    if (!formData.email.trim()) next.email = 'Email is required.';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) next.email = 'Enter a valid email.';
+    if (!formData.subject.trim()) next.subject = 'Subject is required.';
+    if (!formData.message.trim()) next.message = 'Message is required.';
+    else if (formData.message.trim().length < 10) next.message = 'Please write a bit more detail.';
+    setErrors(next);
+    return Object.keys(next).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setStatus({ type: '', message: '' });
+    if (formData.website) return; // bot honeypot
+    if (!validate()) return;
 
+    setIsSubmitting(true);
     try {
       const apiUrl = process.env.REACT_APP_API_URL || '';
-      const payload = JSON.stringify(formData);
+      const payload = JSON.stringify({
+        name: formData.name,
+        email: formData.email,
+        company: formData.company,
+        subject: formData.subject,
+        message: formData.message,
+      });
       let delivered = false;
       let errorMessage = '';
 
@@ -26,24 +60,19 @@ const Contact = () => {
         try {
           const response = await fetch(`${apiUrl}/api/contact`, {
             method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: payload,
           });
           const data = await response.json();
-          if (response.ok) {
-            delivered = true;
-          } else {
-            errorMessage = data.error || 'Backend could not send the message.';
-          }
-        } catch (error) {
+          if (response.ok) delivered = true;
+          else errorMessage = data.error || 'Backend could not send the message.';
+        } catch (_err) {
           errorMessage = 'Backend is unavailable.';
         }
       }
 
       if (!delivered) {
-        const formSubmitResponse = await fetch('https://formsubmit.co/ajax/vijayadurgareddyp@gmail.com', {
+        const formSubmitResponse = await fetch(`https://formsubmit.co/ajax/${profile.email}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -52,139 +81,138 @@ const Contact = () => {
           body: JSON.stringify({
             name: formData.name,
             email: formData.email,
+            company: formData.company,
+            subject: formData.subject,
             message: formData.message,
-            _subject: `Portfolio contact from ${formData.name}`,
+            _subject: formData.subject || `Portfolio contact from ${formData.name}`,
           }),
         });
         const formSubmitData = await formSubmitResponse.json();
-        if (formSubmitResponse.ok && formSubmitData.success !== 'false') {
-          delivered = true;
-        } else {
-          errorMessage = formSubmitData.message || errorMessage || 'Failed to send message.';
-        }
+        if (formSubmitResponse.ok && formSubmitData.success !== 'false') delivered = true;
+        else errorMessage = formSubmitData.message || errorMessage || 'Failed to send message.';
       }
 
       if (delivered) {
-        setStatus({ type: 'success', message: 'Message sent successfully! I will get back to you soon.' });
-        setFormData({ name: '', email: '', message: '' });
+        setStatus({ type: 'success', message: 'Message sent successfully. I will get back to you soon.' });
+        setFormData(initialForm);
       } else {
-        setStatus({ type: 'error', message: errorMessage || 'Failed to send message. Please email me directly.' });
+        setStatus({
+          type: 'error',
+          message: errorMessage || `Failed to send. Email me at ${profile.email}.`,
+        });
       }
-    } catch (error) {
-      setStatus({ type: 'error', message: 'An error occurred. Please email vijayadurgareddyp@gmail.com.' });
+    } catch (_error) {
+      setStatus({ type: 'error', message: `Something went wrong. Please email ${profile.email}.` });
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
+  const fieldClass =
+    'w-full rounded-xl border border-line bg-elevated/30 px-4 py-3 text-sm text-ink placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30';
 
   return (
-    <section
+    <Section
       id="contact"
-      className="min-h-screen flex items-center justify-center p-8 transition-colors duration-500 bg-gray-100 dark:bg-gray-900 relative"
+      kicker="Let's Connect"
+      title="Get In Touch"
+      subtitle="I’m open to Senior Software Engineer, Full Stack, Backend, and AI Application Engineering opportunities across industries."
     >
-      <div className="absolute inset-0 bg-[radial-gradient(#d1d5db_1.5px,transparent_1.5px)] [background-size:20px_20px] dark:bg-none" />
-      <div className="w-full max-w-6xl mx-auto relative z-10">
-        <motion.h2
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-4xl font-bold mb-12 text-center text-gray-800 dark:text-white"
-        >
-          Get in Touch
-        </motion.h2>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="relative group w-[70%] mx-auto"
-        >
-          <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-xl blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200" />
-          <div className="absolute -inset-1 bg-gradient-to-r from-green-300 via-blue-400 to-purple-500 rounded-xl animate-pulse" />
-          <div className="relative bg-white dark:bg-gray-800 rounded-xl shadow-lg p-8 transition-colors duration-300 hover:shadow-xl hover:-translate-y-1 border-2 border-gray-400 dark:border-gray-500 group-hover:border-gray-500 dark:group-hover:border-gray-400">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-2 border-gray-800 dark:border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-500"
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-2 border-gray-800 dark:border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-500"
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={4}
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  className="mt-1 block w-full rounded-md border-2 border-gray-800 dark:border-gray-200 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white transition-colors duration-500"
-                />
-              </div>
-              {status.message && (
-                <div className={`p-4 rounded-md ${
-                  status.type === 'success' 
-                    ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200' 
-                    : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200'
-                }`}>
-                  {status.message}
-                </div>
-              )}
-              <div className="flex justify-between items-center">
-                <div className="flex space-x-6">
-                  <a href="mailto:vijayadurgareddyp@gmail.com" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="Email">
-                    <FaEnvelope className="w-6 h-6" />
-                  </a>
-                  <a href="https://www.linkedin.com/in/vijay-padala-1217121a1" target="_blank" rel="noopener noreferrer" className="text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white transition-colors duration-300" title="LinkedIn">
-                    <FaLinkedin className="w-6 h-6" />
-                  </a>
-                </div>
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className={`bg-gradient-to-r from-blue-500 to-purple-500 text-white py-2 px-6 rounded-md hover:from-blue-600 hover:to-purple-600 transition-colors duration-300 ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
-              </div>
-            </form>
+      <div className="grid gap-8 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="space-y-4">
+          <a href={`mailto:${profile.email}`} className="glass-panel card-interactive flex items-center gap-3 p-4">
+            <span className="icon-link !h-10 !w-10 pointer-events-none">
+              <Mail className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <span>
+              <span className="block text-xs uppercase tracking-wide text-muted">Email</span>
+              <span className="text-sm text-ink">{profile.email}</span>
+            </span>
+          </a>
+          <a href={profile.linkedin} target="_blank" rel="noopener noreferrer" className="glass-panel card-interactive flex items-center gap-3 p-4">
+            <span className="icon-link !h-10 !w-10 pointer-events-none">
+              <Linkedin className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <span>
+              <span className="block text-xs uppercase tracking-wide text-muted">LinkedIn</span>
+              <span className="text-sm text-ink">vijay-padala</span>
+            </span>
+          </a>
+          <a href={profile.github} target="_blank" rel="noopener noreferrer" className="glass-panel card-interactive flex items-center gap-3 p-4">
+            <span className="icon-link !h-10 !w-10 pointer-events-none">
+              <Github className="h-4 w-4" aria-hidden="true" />
+            </span>
+            <span>
+              <span className="block text-xs uppercase tracking-wide text-muted">GitHub</span>
+              <span className="text-sm text-ink">vijay7586</span>
+            </span>
+          </a>
+          <button type="button" onClick={onOpenResume} className="btn-secondary w-full">
+            <Download className="h-4 w-4" aria-hidden="true" />
+            Download Resume
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="relative glass-panel space-y-4 p-6 sm:p-8" noValidate>
+          <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+            <label htmlFor="website">Website</label>
+            <input id="website" name="website" tabIndex={-1} autoComplete="off" value={formData.website} onChange={handleChange} />
           </div>
-        </motion.div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="name" className="mb-1.5 block text-sm font-medium text-ink">Name</label>
+              <input id="name" name="name" type="text" required autoComplete="name" value={formData.name} onChange={handleChange} className={fieldClass} placeholder="Your name" aria-invalid={Boolean(errors.name)} aria-describedby={errors.name ? 'name-error' : undefined} />
+              {errors.name && <p id="name-error" className="mt-1 text-xs text-red-400">{errors.name}</p>}
+            </div>
+            <div>
+              <label htmlFor="email" className="mb-1.5 block text-sm font-medium text-ink">Email</label>
+              <input id="email" name="email" type="email" required autoComplete="email" value={formData.email} onChange={handleChange} className={fieldClass} placeholder="you@company.com" aria-invalid={Boolean(errors.email)} aria-describedby={errors.email ? 'email-error' : undefined} />
+              {errors.email && <p id="email-error" className="mt-1 text-xs text-red-400">{errors.email}</p>}
+            </div>
+          </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="company" className="mb-1.5 block text-sm font-medium text-ink">Company</label>
+              <input id="company" name="company" type="text" autoComplete="organization" value={formData.company} onChange={handleChange} className={fieldClass} placeholder="Optional" />
+            </div>
+            <div>
+              <label htmlFor="subject" className="mb-1.5 block text-sm font-medium text-ink">Subject</label>
+              <input id="subject" name="subject" type="text" required value={formData.subject} onChange={handleChange} className={fieldClass} placeholder="Opportunity or project" aria-invalid={Boolean(errors.subject)} aria-describedby={errors.subject ? 'subject-error' : undefined} />
+              {errors.subject && <p id="subject-error" className="mt-1 text-xs text-red-400">{errors.subject}</p>}
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="message" className="mb-1.5 block text-sm font-medium text-ink">Message</label>
+            <textarea id="message" name="message" required rows={5} value={formData.message} onChange={handleChange} className={`${fieldClass} resize-y`} placeholder="Tell me about the role or project..." aria-invalid={Boolean(errors.message)} aria-describedby={errors.message ? 'message-error' : undefined} />
+            {errors.message && <p id="message-error" className="mt-1 text-xs text-red-400">{errors.message}</p>}
+          </div>
+
+          {status.message && (
+            <div
+              role="status"
+              className={`rounded-xl px-4 py-3 text-sm ${
+                status.type === 'success'
+                  ? 'border border-accent-green/40 bg-accent-green/10 text-accent-green'
+                  : 'border border-red-400/40 bg-red-500/10 text-red-300'
+              }`}
+            >
+              {status.message}
+            </div>
+          )}
+
+          <button type="submit" disabled={isSubmitting} className="btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60">
+            {isSubmitting ? 'Sending...' : 'Send Message'}
+          </button>
+        </form>
       </div>
-    </section>
+      <a href={publicAsset(`/${profile.resumeFile}`)} download={profile.resumeDownloadName} className="sr-only">
+        Direct resume download
+      </a>
+    </Section>
   );
 };
 
-export default Contact; 
+export default Contact;

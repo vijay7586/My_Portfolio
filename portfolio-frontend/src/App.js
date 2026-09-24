@@ -1,40 +1,53 @@
-import React, { useEffect, useState } from 'react';
-import NavBar from './components/NavBar';
-import Home from './components/Home';
-import About from './components/About';
-import Skills from './components/Skills';
-import Experience from './components/Experience';
-import Projects from './components/Projects';
-import Contact from './components/Contact';
+import React, { Suspense, lazy, useState } from 'react';
+import Navbar from './components/Navigation';
+import Hero from './components/Hero';
+import TechScroller from './components/TechScroller';
+import TwinkleBackground from './components/TwinkleBackground';
+import { useTheme } from './hooks/useTheme';
+
+const About = lazy(() => import('./components/About'));
+const Skills = lazy(() => import('./components/Skills'));
+const Experience = lazy(() => import('./components/Experience'));
+const Projects = lazy(() => import('./components/Projects'));
+const Achievements = lazy(() => import('./components/Achievements'));
+const Research = lazy(() => import('./components/Research'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
+const ResumeModal = lazy(() => import('./components/ResumeModal'));
+
+const SectionFallback = () => (
+  <div className="section-shell" aria-hidden="true">
+    <div className="h-36 animate-pulse rounded-card border border-line/50 bg-surface/50" />
+  </div>
+);
 
 function App() {
-  const [isDarkMode, setIsDarkMode] = useState(true);
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    const dark = savedTheme ? savedTheme === 'dark' : true;
-    setIsDarkMode(dark);
-    document.documentElement.classList.toggle('dark', dark);
-  }, []);
-
-  const toggleTheme = () => {
-    const next = !isDarkMode;
-    setIsDarkMode(next);
-    document.documentElement.classList.toggle('dark', next);
-    localStorage.setItem('theme', next ? 'dark' : 'light');
-  };
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const { isDark, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900 transition-colors duration-500">
-      <NavBar isDarkMode={isDarkMode} toggleTheme={toggleTheme} />
-      <main>
-        <Home />
-        <About />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
-      </main>
+    <div className="relative min-h-screen bg-canvas text-ink transition-colors duration-300">
+      <TwinkleBackground />
+      <div className="relative z-10">
+        <Navbar isDark={isDark} onToggleTheme={toggleTheme} />
+        <main>
+          <Hero onOpenResume={() => setResumeOpen(true)} />
+          <TechScroller />
+          <Suspense fallback={<SectionFallback />}>
+            <About />
+            <Skills />
+            <Experience />
+            <Projects />
+            <Achievements />
+            <Research />
+            <Contact onOpenResume={() => setResumeOpen(true)} />
+            <Footer />
+          </Suspense>
+        </main>
+        <Suspense fallback={null}>
+          <ResumeModal open={resumeOpen} onClose={() => setResumeOpen(false)} />
+        </Suspense>
+      </div>
     </div>
   );
 }
